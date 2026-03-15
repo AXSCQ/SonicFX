@@ -1,0 +1,33 @@
+{
+    "name": "sonicfx",
+    "version": "1.0.0",
+    "description": "Advanced audio-reactive visual effects for DOM elements. Instrument presets, dynamic gradients, overlays, and CSS filter effects driven by audio energy.",
+    "main": "src/sonicfx.js",
+    "module": "src/sonicfx.js",
+    "type": "module",
+    "files": [
+        "src/",
+        "README.md",
+        "LICENSE"
+    ],
+    "scripts": {
+        "build": "esbuild src/sonicfx.js --bundle --minify --format=esm --outfile=dist/sonicfx.min.js",
+        "dev": "esbuild src/sonicfx.js --bundle --format=esm --outfile=dist/sonicfx.js --watch"
+    },
+    "keywords": [
+        "audio",
+        "visual-effects",
+        "reactive",
+        "css-effects",
+        "gradients",
+        "instrument",
+        "sonicmotion",
+        "music",
+        "animation"
+    ],
+    "author": "axscq",
+    "license": "MIT",
+    "devDependencies": {
+        "esbuild": "^0.20.0"
+    }
+}
