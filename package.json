@@ -1,7 +1,7 @@
 {
     "name": "sonicfx",
     "version": "1.0.0",
-    "description": "Advanced audio-reactive visual effects for DOM elements. Instrument presets, dynamic gradients, overlays, and CSS filter effects driven by audio energy.",
+    "description": "Audio-reactive CSS visual effects for DOM: dynamic gradients, CSS filters, glow borders and overlays driven by music stem energy. Zero dependencies.",
     "main": "src/sonicfx.js",
     "module": "src/sonicfx.js",
     "type": "module",
