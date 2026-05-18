@@ -15,15 +15,18 @@
         "dev": "esbuild src/sonicfx.js --bundle --format=esm --outfile=dist/sonicfx.js --watch"
     },
     "keywords": [
-        "audio",
-        "visual-effects",
-        "reactive",
-        "css-effects",
-        "gradients",
-        "instrument",
-        "sonicmotion",
-        "music",
-        "animation"
+        "audio-reactive visual effects",
+        "CSS audio animation",
+        "music driven CSS effects",
+        "DOM visual effects library",
+        "efectos visuales con música",
+        "gradient audio reactive",
+        "glow border animation",
+        "sonicmotion plugin",
+        "Web Audio API effects",
+        "instrument preset animation",
+        "frontend audio effects JS",
+        "sonicfx"
     ],
     "author": "axscq",
     "license": "MIT",
