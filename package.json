@@ -1,6 +1,6 @@
 {
     "name": "sonicfx",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Audio-reactive CSS visual effects for DOM: dynamic gradients, CSS filters, glow borders and overlays driven by music stem energy. Zero dependencies.",
     "main": "src/sonicfx.js",
     "module": "src/sonicfx.js",
