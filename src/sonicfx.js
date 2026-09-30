@@ -4,7 +4,7 @@
  * Provides instrument-specific presets, dynamic gradients, overlays,
  * CSS filter effects, and border animations driven by audio energy.
  * 
- * @version 1.0.0
+ * @version 1.1.0
  */
 
 // Instrument presets
@@ -18,6 +18,13 @@ import { BORDER_EFFECTS, borderPulse, borderGlow, borderRainbow } from './effect
 
 // Utilities
 import { parseColor, rgba, lerpColor, lighten } from './utils/color-utils.js';
+
+/** The loudest stem of a SonicMotion frame (keys starting with _ are metadata). */
+function loudest(data) {
+    let best;
+    for (const [k, d] of Object.entries(data)) if (k[0] !== '_' && d && (!best || (d.value ?? 0) > (best.value ?? 0))) best = d;
+    return best;
+}
 
 /**
  * SonicFX main class — Manages audio-reactive effects on DOM elements
@@ -55,7 +62,7 @@ class SonicFXInstance {
             elements = Array.from(document.querySelectorAll(selector));
         } else if (selector instanceof NodeList || Array.isArray(selector)) {
             elements = Array.from(selector);
-        } else if (selector instanceof HTMLElement) {
+        } else if (selector instanceof Element) {   // also SVG elements
             elements = [selector];
         }
 
@@ -75,10 +82,11 @@ class SonicFXInstance {
             this._bindings.push({
                 element: el,
                 preset: effectFn,
+                fromDOM: !!config.fromDOM,
                 config: {
+                    ...config,
                     stem: config.stem || 'master',
                     band: config.band || null,
-                    ...config
                 }
             });
         });
@@ -90,6 +98,8 @@ class SonicFXInstance {
      * Parse DOM for [data-sonicfx] elements
      */
     parseDOM() {
+        // re-parsing replaces the previous DOM bindings instead of duplicating them
+        this._bindings = this._bindings.filter(b => !b.fromDOM);
         const elements = document.querySelectorAll('[data-sonicfx]');
         elements.forEach(el => {
             const preset = el.getAttribute('data-sonicfx');
@@ -98,7 +108,7 @@ class SonicFXInstance {
             const color = el.getAttribute('data-sonicfx-color') || undefined;
             const intensity = parseFloat(el.getAttribute('data-sonicfx-intensity')) || 1.0;
 
-            this.bind(el, preset, { stem, band, color, intensity });
+            this.bind(el, preset, { stem, band, color, intensity, fromDOM: true });
         });
         return this;
     }
@@ -178,7 +188,8 @@ class SonicFXInstance {
         for (const binding of this._bindings) {
             let value = 0;
 
-            const stemData = data[binding.config.stem];
+            // 'master' follows the loudest stem when there is no stem called master
+            const stemData = data[binding.config.stem] ?? (binding.config.stem === 'master' ? loudest(data) : undefined);
             if (stemData) {
                 if (binding.config.band && stemData.bands) {
                     const bandObj = stemData.bands[binding.config.band];
@@ -212,7 +223,7 @@ const SonicFX = {
     rgba,
     lerpColor,
     lighten,
-    version: '1.0.0'
+    version: '1.1.0'
 };
 
 export default SonicFX;

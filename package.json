@@ -1,6 +1,6 @@
 {
     "name": "sonicfx",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "description": "Audio-reactive CSS visual effects for DOM: dynamic gradients, CSS filters, glow borders and overlays driven by music stem energy. Zero dependencies.",
     "main": "src/sonicfx.js",
     "module": "src/sonicfx.js",
@@ -12,7 +12,8 @@
     ],
     "scripts": {
         "build": "esbuild src/sonicfx.js --bundle --minify --format=esm --outfile=dist/sonicfx.min.js",
-        "dev": "esbuild src/sonicfx.js --bundle --format=esm --outfile=dist/sonicfx.js --watch"
+        "dev": "esbuild src/sonicfx.js --bundle --format=esm --outfile=dist/sonicfx.js --watch",
+        "test": "node --test \"test/*.test.js\""
     },
     "keywords": [
         "audio-reactive visual effects",

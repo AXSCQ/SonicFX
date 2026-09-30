@@ -10,12 +10,14 @@ export class OverlayController {
      * @param {number} [config.maxOpacity=0.7] - Maximum opacity
      * @param {number} [config.duration=500] - Transition duration in ms
      * @param {number} [config.zIndex=40] - CSS z-index
+     * @param {boolean} [config.blocking=false] - Catch clicks while visible
      */
     constructor(config = {}) {
         this._color = config.color || '#000000';
         this._maxOpacity = config.maxOpacity ?? 0.7;
         this._duration = config.duration ?? 500;
         this._zIndex = config.zIndex ?? 40;
+        this._blocking = config.blocking ?? false;
         this._element = null;
         this._visible = false;
     }
@@ -44,12 +46,15 @@ export class OverlayController {
     }
 
     /**
-     * Fade to overlay (darken)
+     * Fade to overlay (darken). The overlay does not take pointer events: it
+     * is decoration, and with pointer-events:auto it blocked every click on
+     * the page while visible (e.g. the whole song with setIntensity).
+     * Pass { blocking: true } to the constructor to make it catch clicks.
      */
     fadeIn() {
         if (!this._element) this.mount();
         this._element.style.opacity = String(this._maxOpacity);
-        this._element.style.pointerEvents = 'auto';
+        this._element.style.pointerEvents = this._blocking ? 'auto' : 'none';
         this._visible = true;
         return this;
     }
@@ -74,7 +79,7 @@ export class OverlayController {
         if (!this._element) this.mount();
         const max = maxOpacity ?? this._maxOpacity;
         this._element.style.opacity = String(value * max);
-        this._element.style.pointerEvents = value > 0.01 ? 'auto' : 'none';
+        this._element.style.pointerEvents = this._blocking && value > 0.01 ? 'auto' : 'none';
         this._visible = value > 0.01;
         return this;
     }

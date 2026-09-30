@@ -157,3 +157,11 @@ fx.destroy()           // Clean up all resources
 ## 📄 License
 
 MIT © 2025 axscq
+
+## Cambios v1.1.0
+
+- **Overlay**: ya no bloquea los clics de la página mientras está visible (antes `setIntensity` ponía `pointer-events: auto` durante toda la canción). Para que capture clics: `new OverlayController({ blocking: true })`.
+- **`borderRainbow`**: el color pasa suavemente de uno al siguiente y, en silencio, el borde vuelve a reposo (antes quedaba congelado en el último color y ancho).
+- **`bind`** acepta elementos SVG; **`parseDOM`** reemplaza los vínculos anteriores en vez de duplicarlos.
+- `stem: 'master'` (el valor por defecto) sigue al stem más fuerte del cuadro.
+- Pruebas: `npm test` (node:test).

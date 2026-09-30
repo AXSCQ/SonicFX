@@ -2,7 +2,7 @@
  * Border Effects — Dynamic border properties that react to audio.
  * Extracted from AstroPrueba MultiTrackAudioVisualizer border effects.
  */
-import { rgba } from '../utils/color-utils.js';
+import { rgba, lerpColor } from '../utils/color-utils.js';
 
 /**
  * Dynamic border width that pulses with audio
@@ -58,12 +58,15 @@ export function borderRainbow(element, value, config = {}) {
     const nextIdx = (idx + 1) % colors.length;
     const frac = t % 1;
 
-    // Only animate when there's audio energy
+    // With energy the color glides from one to the next; in silence the
+    // border goes back to rest (it used to freeze on the last color/width).
     if (value > 0.05) {
-        const color = colors[idx]; // Simple color pick
-        const opacity = 0.5 + value * 0.5;
-        element.style.borderColor = rgba(color, opacity);
+        const color = lerpColor(colors[idx], colors[nextIdx], frac);
+        element.style.borderColor = rgba(color, 0.5 + value * 0.5);
         element.style.borderWidth = `${Math.max(1, value * 4)}px`;
+    } else {
+        element.style.borderColor = '';
+        element.style.borderWidth = '';
     }
 }
 
