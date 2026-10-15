@@ -20,13 +20,16 @@ export class OverlayController {
         this._blocking = config.blocking ?? false;
         this._element = null;
         this._visible = false;
+        this._destroyed = false;
     }
 
     /**
      * Create and inject the overlay element into the DOM
+     * (después de destroy() solo vuelve si se llama a mount() a propósito)
      * @param {HTMLElement} [container=document.body]
      */
     mount(container) {
+        this._destroyed = false;
         if (this._element) return this;
 
         this._element = document.createElement('div');
@@ -52,6 +55,8 @@ export class OverlayController {
      * Pass { blocking: true } to the constructor to make it catch clicks.
      */
     fadeIn() {
+        // una capa destruida (o reemplazada por createOverlay) no vuelve sola al DOM
+        if (this._destroyed) return this;
         if (!this._element) this.mount();
         this._element.style.opacity = String(this._maxOpacity);
         this._element.style.pointerEvents = this._blocking ? 'auto' : 'none';
@@ -76,6 +81,7 @@ export class OverlayController {
      * @param {number} [maxOpacity] - Override max opacity
      */
     setIntensity(value, maxOpacity) {
+        if (this._destroyed) return this;
         if (!this._element) this.mount();
         const max = maxOpacity ?? this._maxOpacity;
         this._element.style.opacity = String(value * max);
@@ -94,5 +100,7 @@ export class OverlayController {
             this._element.parentNode.removeChild(this._element);
         }
         this._element = null;
+        this._visible = false;
+        this._destroyed = true;
     }
 }
